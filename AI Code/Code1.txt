@@ -1,0 +1,67 @@
+% Input parameters
+min_bending_force = input('Enter minimum bending force: ');
+max_bending_force = input('Enter maximum bending force: ');
+min_torsional_force = input('Enter minimum torsional force: ');
+max_torsional_force = input('Enter maximum torsional force: ');
+material_name = input('Enter material name: ');
+
+% Material properties (from material bank)
+if strcmp(material_name, 'ASIS4140')
+    S_ut = 1000; % Ultimate tensile strength (MPa)
+    S_y = 800; % Yield strength (MPa)
+    E = 207000; % Young's modulus (MPa)
+    K_f = 1.1; % Fatigue strength reduction factor
+    A = 0.06; % Material constant
+elseif strcmp(material_name, 'ASIS4340')
+    S_ut = 1100;
+    S_y = 900;
+    E = 207000;
+    K_f = 1.2;
+    A = 0.06;
+else
+    error('Invalid material name');
+end
+
+% Calculate endurance limit
+S_e = 0.5*S_ut;
+
+% Assume an initial diameter for size factor
+d = 50; % mm
+
+% Calculate stress concentration factor due to change in diameter with a fillet
+r = 5; % mm (fillet radius)
+K_t = 1 + 2*r/d;
+
+% Calculate stress amplitude due to bending and torsional forces
+M = (max_bending_force - min_bending_force)*1000/4; % Nm
+T = (max_torsional_force - min_torsional_force)*1000/2; % Nm
+sigma_b = sqrt(3)*K_f*M/(pi*d^3); % MPa
+tau = sqrt(3)*K_f*T/(pi*d^3); % MPa
+
+% Calculate equivalent stress amplitude
+sigma_e = sqrt(sigma_b^2 + 3*tau^2);
+
+% Calculate size factor
+q = 1/(A*(d^(-0.107)));
+
+% Calculate allowable stress amplitude
+S_a = S_e/(q*K_t);
+
+% Calculate safety factor
+n = S_a/sigma_e;
+
+% Iterate to find minimum diameter
+while n < 1.5
+    d = d + 1;
+    K_t = 1 + 2*r/d;
+    sigma_b = sqrt(3)*K_f*M/(pi*d^3);
+    tau = sqrt(3)*K_f*T/(pi*d^3);
+    sigma_e = sqrt(sigma_b^2 + 3*tau^2);
+    q = 1/(A*(d^(-0.107)));
+    S_a = S_e/(q*K_t);
+    n = S_a/sigma_e;
+end
+
+% Output minimum diameter and safety factor
+fprintf('Minimum diameter: %.2f mm\n', d);
+fprintf('Safety factor: %.2f\n', n);

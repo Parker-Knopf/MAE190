@@ -1,0 +1,42 @@
+% Input parameters (you may modify these as needed)
+min_bending_force = 100; % in kN
+max_bending_force = 200; % in kN
+min_torsional_force = 50; % in kN-m
+max_torsional_force = 100; % in kN-m
+material_type = 'ASIS 4140'; % choose from material bank
+
+% Material properties (you may modify these as needed)
+material_bank = {'ASIS 4140', 735, 270}; % material bank with name, ultimate strength (in MPa), and yield strength (in MPa)
+material_index = find(strcmp(material_bank(:,1), material_type));
+ultimate_strength = material_bank{material_index, 2}; % in MPa
+yield_strength = material_bank{material_index, 3}; % in MPa
+
+% Initial diameter and stress concentration factor (you may modify these as needed)
+initial_diameter = 50; % in mm
+stress_concentration_factor = 1.5;
+
+% Calculate equivalent bending and torsional stresses using ASME formula
+mean_bending_force = (min_bending_force + max_bending_force) / 2;
+range_bending_force = (max_bending_force - min_bending_force) / 2;
+mean_torsional_force = (min_torsional_force + max_torsional_force) / 2;
+range_torsional_force = (max_torsional_force - min_torsional_force) / 2;
+equivalent_bending_stress = sqrt(range_bending_force^2 + (3 * stress_concentration_factor * mean_bending_force / (2 * pi * initial_diameter))^2);
+equivalent_torsional_stress = sqrt(range_torsional_force^2 + (3 * stress_concentration_factor * mean_torsional_force / (2 * pi * initial_diameter))^2);
+
+% Numerically calculate endurance limit using DE-ASME formula
+n = 1; % starting point for iteration
+while true
+    endurance_limit = ultimate_strength / (2 * (0.5 + 0.5 * (equivalent_bending_stress / endurance_limit)^n)^(1/n));
+    if abs(endurance_limit - yield_strength) < 0.001 % convergence criteria
+        break;
+    else
+        n = n + 0.1; % increment by 0.1 for each iteration
+    end
+end
+
+% Calculate minimum diameter using DE-ASME formula and endurance limit
+minimum_diameter = ((2 * ultimate_strength * pi^2 * initial_diameter^2) / (n * endurance_limit * (equivalent_bending_stress^2 + equivalent_torsional_stress^2)))^(1/3);
+
+% Output results
+fprintf('Minimum diameter %.2f mmn', minimum_diameter);
+fprintf('Endurance limit %.2f MPan', endurance_limit);
