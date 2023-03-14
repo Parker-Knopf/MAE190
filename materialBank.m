@@ -20,8 +20,8 @@ steel1050CD.sy = 84 * 1000; % psi
 steel1050CD.sut = 100 * 1000; % psi
 steel1050CD.name = 'Steel_1050_CD';
 
-a36.sy = 250;
-a36.sut = 400;
+a36.sy = 250 * 1000; % psi
+a36.sut = 400 * 1000; % psi
 a36.name = "a36";
 
 %% Bank
