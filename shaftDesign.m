@@ -52,7 +52,7 @@ while (state ~= -1)
         line()
         title();
         d = model(Tm,Ta, Mm, Ma, material, n, dtoD, dtor);
-        fprintf("Minimum Diameter: %.2f\n", d);
+        fprintf("Minimum Diameter: %.2f inches\n", d);
         line()
         input("Enter to continue")
         state = 0;

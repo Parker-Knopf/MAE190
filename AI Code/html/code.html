@@ -1,0 +1,205 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>code</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-03-13"><meta name="DC.source" content="code.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Input parameters</a></li><li><a href="#2">Material bank</a></li><li><a href="#3">Select material</a></li><li><a href="#4">Constants</a></li><li><a href="#5">Calculation of bending stress range</a></li><li><a href="#6">Calculation of torsional stress range</a></li><li><a href="#7">Calculation of equivalent alternating stress</a></li><li><a href="#8">Calculation of corrected endurance limit</a></li><li><a href="#9">Calculation of fatigue strength reduction factor</a></li><li><a href="#10">Calculation of minimum diameter</a></li><li><a href="#11">Output results</a></li></ul></div><h2 id="1">Input parameters</h2><pre class="codeinput">M_b_mean = input(<span class="string">"Enter mean bending moment (N.m): "</span>);
+M_b_amp = input(<span class="string">"Enter bending moment amplitude (N.m): "</span>);
+T_mean = input(<span class="string">"Enter mean torsional torque (N.m): "</span>);
+T_amp = input(<span class="string">"Enter torsional torque amplitude (N.m): "</span>);
+</pre><pre class="codeoutput error">Error using input
+Cannot call INPUT from EVALC.
+
+Error in code (line 2)
+M_b_mean = input("Enter mean bending moment (N.m): ");
+</pre><h2 id="2">Material bank</h2><pre class="codeinput">materials = [<span class="string">"A36"</span>, <span class="string">"A242"</span>, <span class="string">"A514"</span>, <span class="string">"A572"</span>, <span class="string">"A588"</span>, <span class="string">"A709"</span>, <span class="string">"A992"</span>, <span class="string">"A1011"</span>, <span class="string">"A1065"</span>];
+Sut_values = [400, 485, 760, 450, 485, 690, 450, 345, 450]; <span class="comment">% Ultimate strength in MPa</span>
+Sy_values = [250, 345, 690, 345, 345, 485, 345, 205, 345]; <span class="comment">% Yield strength in MPa</span>
+Se_prime_values = [160, 195, 310, 185, 195, 276, 185, 141, 185]; <span class="comment">% Endurance limit in MPa</span>
+</pre><h2 id="3">Select material</h2><pre class="codeinput">disp(<span class="string">"Select a material from the following options:"</span>);
+disp(materials);
+material_index = input(<span class="string">"Enter the index of the selected material: "</span>);
+Sut = Sut_values(material_index);
+Sy = Sy_values(material_index);
+Se_prime = Se_prime_values(material_index);
+</pre><h2 id="4">Constants</h2><pre class="codeinput">Kf = 1.5; <span class="comment">% Size factor</span>
+Ka = 0.85; <span class="comment">% Surface factor</span>
+Kb = 1; <span class="comment">% Size Factor</span>
+Kc = 1; <span class="comment">% Loading factor</span>
+Kd = 1; <span class="comment">% Temperature factor</span>
+Ke = 0.753; <span class="comment">% Temperature factor</span>
+Kt = 1; <span class="comment">% Temperature factor</span>
+Kr = 0.814; <span class="comment">% Reliability factor</span>
+n = 3; <span class="comment">% Slope of the S-N curve</span>
+C = 0; <span class="comment">% Constant in the S-N curve</span>
+Fs = 1.5; <span class="comment">% Factor of safety</span>
+</pre><h2 id="5">Calculation of bending stress range</h2><pre class="codeinput">M_b_min = M_b_mean - M_b_amp/2; <span class="comment">% Minimum bending moment</span>
+M_b_max = M_b_mean + M_b_amp/2; <span class="comment">% Maximum bending moment</span>
+D = 0.01:0.01:100; <span class="comment">% Range of diameters to check</span>
+sigma_b_range = (32*M_b_max./(pi*D.^3)).^2 + (32*M_b_min./(pi*D.^3)).^2; <span class="comment">% Range of bending stress</span>
+sigma_b = max(sigma_b_range); <span class="comment">% Maximum bending stress</span>
+</pre><h2 id="6">Calculation of torsional stress range</h2><pre class="codeinput">T_min = T_mean - T_amp/2; <span class="comment">% Minimum torque</span>
+T_max = T_mean + T_amp/2; <span class="comment">% Maximum torque</span>
+tau_t_range = (16*T_max./(pi*D.^3)).^2 + (16*T_min./(pi*D.^3)).^2; <span class="comment">% Range of torsional stress</span>
+tau_t = max(tau_t_range); <span class="comment">% Maximum torsional stress</span>
+</pre><h2 id="7">Calculation of equivalent alternating stress</h2><pre class="codeinput">sigma_a_prime = sqrt(sigma_b^2 + 3*tau_t^2); <span class="comment">% Equivalent alternating stress</span>
+</pre><h2 id="8">Calculation of corrected endurance limit</h2><pre class="codeinput">Se = Se_prime*Ka*Kb*Kc*Kd*Ke*Kf*Kt; <span class="comment">% Corrected endurance limit</span>
+Kd = 0.85; <span class="comment">% Surface finish correction factor</span>
+Ke = 1; <span class="comment">% Reliability correction factor</span>
+</pre><h2 id="9">Calculation of fatigue strength reduction factor</h2><pre class="codeinput">q = (sigma_a_prime/(Se/1e6))^n; <span class="comment">% Fatigue strength reduction factor</span>
+<span class="keyword">if</span> q &lt;= 1
+    q_prime = 1;
+<span class="keyword">else</span>
+    q_prime = 1/(q^(1/n));
+<span class="keyword">end</span>
+</pre><h2 id="10">Calculation of minimum diameter</h2><pre class="codeinput">d_guess = 1; <span class="comment">% Initial guess of diameter in mm</span>
+d_old = 0; <span class="comment">% Initialize old diameter</span>
+<span class="keyword">while</span> abs(d_guess - d_old) &gt; 0.001 <span class="comment">% Loop until convergence</span>
+    d_old = d_guess;
+    Kb = 1.355*(d_guess^(-0.15)); <span class="comment">% Size correction factor</span>
+    Se =Se_prime*Ka*Kb*Kc*Kd*Ke*Kf*Kt;
+    d_guess = (16*n/pi * (4*(Kf*M_b_amp/Se)^2 + 3*(Kf*T_amp/Se)^2 + 4*(Kf*M_b_mean/Sy)^2 + 4*(Kf*M_b_mean/Sy)^2 + 3*(Kf*T_mean/Sy)^2 )^(1/2) )^(1/3);
+<span class="keyword">end</span>
+</pre><h2 id="11">Output results</h2><pre class="codeinput">fprintf(<span class="string">'Minimum diameter: %.2f mm\n'</span>, d_guess);
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Input parameters
+M_b_mean = input("Enter mean bending moment (N.m): ");
+M_b_amp = input("Enter bending moment amplitude (N.m): ");
+T_mean = input("Enter mean torsional torque (N.m): ");
+T_amp = input("Enter torsional torque amplitude (N.m): ");
+
+%% Material bank
+materials = ["A36", "A242", "A514", "A572", "A588", "A709", "A992", "A1011", "A1065"];
+Sut_values = [400, 485, 760, 450, 485, 690, 450, 345, 450]; % Ultimate strength in MPa
+Sy_values = [250, 345, 690, 345, 345, 485, 345, 205, 345]; % Yield strength in MPa
+Se_prime_values = [160, 195, 310, 185, 195, 276, 185, 141, 185]; % Endurance limit in MPa
+
+%% Select material
+disp("Select a material from the following options:");
+disp(materials);
+material_index = input("Enter the index of the selected material: ");
+Sut = Sut_values(material_index);
+Sy = Sy_values(material_index);
+Se_prime = Se_prime_values(material_index);
+
+%% Constants
+Kf = 1.5; % Size factor
+Ka = 0.85; % Surface factor
+Kb = 1; % Size Factor
+Kc = 1; % Loading factor
+Kd = 1; % Temperature factor
+Ke = 0.753; % Temperature factor
+Kt = 1; % Temperature factor
+Kr = 0.814; % Reliability factor
+n = 3; % Slope of the S-N curve
+C = 0; % Constant in the S-N curve
+Fs = 1.5; % Factor of safety
+
+%% Calculation of bending stress range
+M_b_min = M_b_mean - M_b_amp/2; % Minimum bending moment
+M_b_max = M_b_mean + M_b_amp/2; % Maximum bending moment
+D = 0.01:0.01:100; % Range of diameters to check
+sigma_b_range = (32*M_b_max./(pi*D.^3)).^2 + (32*M_b_min./(pi*D.^3)).^2; % Range of bending stress
+sigma_b = max(sigma_b_range); % Maximum bending stress
+
+%% Calculation of torsional stress range
+T_min = T_mean - T_amp/2; % Minimum torque
+T_max = T_mean + T_amp/2; % Maximum torque
+tau_t_range = (16*T_max./(pi*D.^3)).^2 + (16*T_min./(pi*D.^3)).^2; % Range of torsional stress
+tau_t = max(tau_t_range); % Maximum torsional stress
+
+%% Calculation of equivalent alternating stress
+sigma_a_prime = sqrt(sigma_b^2 + 3*tau_t^2); % Equivalent alternating stress
+
+%% Calculation of corrected endurance limit
+Se = Se_prime*Ka*Kb*Kc*Kd*Ke*Kf*Kt; % Corrected endurance limit
+Kd = 0.85; % Surface finish correction factor
+Ke = 1; % Reliability correction factor
+
+%% Calculation of fatigue strength reduction factor
+q = (sigma_a_prime/(Se/1e6))^n; % Fatigue strength reduction factor
+if q <= 1
+    q_prime = 1;
+else
+    q_prime = 1/(q^(1/n));
+end
+
+%% Calculation of minimum diameter
+d_guess = 1; % Initial guess of diameter in mm
+d_old = 0; % Initialize old diameter
+while abs(d_guess - d_old) > 0.001 % Loop until convergence
+    d_old = d_guess;
+    Kb = 1.355*(d_guess^(-0.15)); % Size correction factor
+    Se =Se_prime*Ka*Kb*Kc*Kd*Ke*Kf*Kt;
+    d_guess = (16*n/pi * (4*(Kf*M_b_amp/Se)^2 + 3*(Kf*T_amp/Se)^2 + 4*(Kf*M_b_mean/Sy)^2 + 4*(Kf*M_b_mean/Sy)^2 + 3*(Kf*T_mean/Sy)^2 )^(1/2) )^(1/3);
+end
+
+%% Output results
+fprintf('Minimum diameter: %.2f mm\n', d_guess);
+##### SOURCE END #####
+--></body></html>
